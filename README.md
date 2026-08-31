@@ -1,7 +1,5 @@
 
-## یک سیستم هوشمند برای تحلیل و ارزیابی رزومه‌های فارسی
-
-## قابلیت‌ها
+## سیستم هوشمند برای تحلیل و ارزیابی رزومه‌های فارسی
 - استخراج متن از PDF
 - استخراج اطلاعات ساختاری رزومه
 - تحلیل رزومه با روش‌های Rule-based
@@ -12,6 +10,7 @@
 ## تکنولوژی‌ها
 موارد: Python | Streamlit | NLP | LLM | Gemini | OpenRouter
 
+---
 
 # Persian Resume Analyzer
 
@@ -19,7 +18,6 @@ An AI-powered application for analyzing, evaluating, and improving Persian resum
 
 The system processes Persian resume documents, extracts and structures their content, evaluates resume quality, identifies potential weaknesses, and provides AI-assisted suggestions for improvement.
 
----
 
 ## Overview
 
@@ -29,7 +27,6 @@ The project combines traditional rule-based processing with Large Language Model
 
 The application provides a user-friendly interface built with Streamlit and supports modular AI services for resume processing and analysis.
 
----
 
 ## Features
 
