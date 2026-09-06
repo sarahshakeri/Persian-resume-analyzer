@@ -2,9 +2,9 @@
 
 # Persian Resume Analyzer
 
-An AI-assisted system for analyzing and improving **Persian-language resumes**. The project combines PDF text extraction, text normalization, rule-based evaluation, LLM-based text repair, structured information extraction, resume analysis, and quality assessment in a modular Streamlit application.
+A modular system for analyzing and improving **Persian-language resumes**. The project combines PDF text extraction, text normalization, rule-based evaluation, LLM-based text repair, structured information extraction, resume analysis, and quality assessment in a Streamlit application.
 
-The main goal is not simply to generate a score, but to build a multi-stage pipeline that turns an unstructured Persian resume PDF into structured information and actionable feedback.
+The main goal is not simply to generate a score, but to build a multi-stage pipeline that turns an unstructured Persian resume PDF into structured information and useful feedback.
 
 ---
 
@@ -12,7 +12,7 @@ The main goal is not simply to generate a score, but to build a multi-stage pipe
 
 Persian resumes introduce several practical challenges for automated processing, especially when the source document is a PDF. Text extraction can introduce broken words, incorrect spacing, misplaced line breaks, and RTL/LTR ordering problems.
 
-This project addresses those problems through a staged workflow:
+This project addresses these issues through a staged workflow:
 
 ```text
 PDF Resume
@@ -23,38 +23,38 @@ Text Cleaning / Normalization
     ↓
 Rule-Based Pre-Check
     ↓
-AI Text Repair
+LLM Text Repair
     ↓
 Structured Resume Extraction
     ↓
 ┌───────────────────────────────┐
-│ AI Resume Analysis            │
+│ Resume Analysis               │
 │ Resume Quality Assessment     │
 └───────────────────────────────┘
     ↓
-Actionable Feedback
+Analysis Results
 ```
 
-The application is implemented as a modular Python project with separate services, prompts, utilities, and Streamlit views.
+The application is organized as a modular Python project with separate services, prompts, utilities, and Streamlit views.
 
 ---
 
 ## Key Features
 
-- 📄 Persian PDF resume text extraction
-- 🧹 Text cleaning and normalization
-- 🔎 Rule-based resume pre-check
-- 📊 Structured resume information extraction
-- ✨ AI-assisted repair of PDF extraction artifacts
-- 🧠 LLM-based professional resume analysis
-- 🔍 Dedicated resume quality assessment
-- 🤖 ATS-oriented evaluation
-- 💼 Technical career and recruiter-oriented analysis
-- 🔗 Detection of professional profiles such as LinkedIn and GitHub
-- 📈 Rule-based score breakdown across multiple resume dimensions
-- 🔄 Modular LLM provider architecture
-- 🛟 Automatic fallback from Gemini to OpenRouter for selected temporary service failures
-- 🌐 Interactive Streamlit interface
+- Persian PDF resume text extraction
+- Text cleaning and normalization
+- Rule-based resume pre-check
+- Structured resume information extraction
+- LLM-based repair of PDF extraction artifacts
+- LLM-based professional resume analysis
+- Dedicated resume quality assessment
+- ATS-oriented evaluation
+- Technical career and recruiter-oriented analysis
+- Detection of professional profiles such as LinkedIn and GitHub
+- Rule-based score breakdown across multiple resume dimensions
+- Modular LLM provider architecture
+- Fallback from Gemini to OpenRouter for selected temporary service failures
+- Interactive Streamlit interface
 
 ---
 
@@ -62,7 +62,7 @@ The application is implemented as a modular Python project with separate service
 
 ### 1. PDF Text Extraction
 
-The uploaded PDF is processed page by page and its text is extracted before any analysis takes place.
+The uploaded PDF is processed page by page and its text is extracted before further analysis.
 
 The project uses **PyMuPDF** for this stage.
 
@@ -74,7 +74,7 @@ The rule-based analyzer also contains targeted repairs for examples such as brok
 
 ### 3. Rule-Based Pre-Check
 
-Before sending the resume through the deeper AI stages, a deterministic rule-based analyzer performs an initial evaluation.
+Before the deeper analysis stages, a deterministic rule-based analyzer performs an initial evaluation.
 
 The current analyzer evaluates categories including:
 
@@ -96,11 +96,11 @@ It also produces:
 - Writing/content checks
 - A list of issues with severity and suggestions
 
-The rule-based layer is intentionally separate from the LLM analysis so that explicit, deterministic checks can be performed independently.
+The rule-based layer is kept separate from LLM analysis so that explicit checks can be performed independently.
 
-### 4. AI Text Repair
+### 4. LLM Text Repair
 
-PDF extraction is not always reliable for Persian documents. Instead of immediately analyzing potentially corrupted text, the application can send the cleaned text to an LLM specifically for **text reconstruction**.
+PDF extraction is not always reliable for Persian documents. The application can send cleaned text to an LLM specifically for **text reconstruction** before the later analysis stages.
 
 The repair stage is instructed to:
 
@@ -113,7 +113,7 @@ The repair stage is instructed to:
 - Preserve the original content
 - Avoid adding, removing, summarizing, or professionally rewriting information
 
-This stage is designed as **reconstruction**, not content enhancement.
+This stage is intended as reconstruction rather than content enhancement.
 
 ### 5. Structured Resume Extraction
 
@@ -144,9 +144,9 @@ Certificates
 Projects
 ```
 
-The extraction prompt explicitly requires the model to use only information present in the resume and to return `null` for unavailable fields.
+The extraction prompt requires the model to use only information present in the resume and to return `null` for unavailable fields.
 
-### 6. AI Resume Analysis
+### 6. Resume Analysis
 
 Once the resume has been structured, a separate analysis stage evaluates it from a professional perspective.
 
@@ -161,7 +161,7 @@ The current analysis considers:
 - ATS optimization
 - Readiness for technical roles
 
-The analysis is instructed to distinguish existing information from missing information and to provide specific, actionable recommendations rather than generic advice.
+The analysis is instructed to distinguish existing information from missing information and to provide specific recommendations rather than generic advice.
 
 ### 7. Resume Quality Assessment
 
@@ -173,7 +173,7 @@ A separate quality-analysis pipeline evaluates the structured resume from three 
 
 It produces separate assessments for overall quality, ATS, structure, experience quality, technical profile, recruiter perspective, and priority improvements.
 
-This separation allows the project to distinguish between **content analysis** and **resume quality/presentation analysis**.
+This separation distinguishes content analysis from resume quality and presentation analysis.
 
 ---
 
@@ -186,16 +186,16 @@ One of the main design decisions in the project is keeping deterministic checks 
 | Rule-Based Analysis | Deterministic checks, structural signals, contact/profile detection, scoring, and explicit issues |
 | Text Repair LLM | Reconstruction of corrupted PDF-extracted text without changing its meaning |
 | Structured Extraction LLM | Conversion of resume text into a consistent JSON representation |
-| Resume Analysis LLM | Deeper professional and career-oriented evaluation |
+| Resume Analysis LLM | Professional and career-oriented evaluation |
 | Quality Analysis LLM | ATS, structure, recruiter perspective, and prioritized improvements |
 
-This architecture makes each stage responsible for a specific task instead of asking a single prompt to perform the entire workflow.
+This architecture gives each stage a defined responsibility instead of relying on a single prompt for the entire workflow.
 
 ---
 
 ## LLM Provider Architecture
 
-The project uses a small provider abstraction through `services/llm_service.py`.
+The project uses a provider abstraction through `services/llm_service.py`.
 
 ### Primary Provider: Gemini
 
@@ -272,7 +272,7 @@ Persian-resume-analyzer/
 ### Module Responsibilities
 
 - **`app.py`** — Streamlit application flow and session-state management
-- **`services/`** — AI providers and resume-analysis logic
+- **`services/`** — LLM providers and resume-analysis logic
 - **`prompts/`** — Dedicated prompts for each LLM task
 - **`utils/`** — PDF extraction and text-processing utilities
 - **`views/`** — Presentation of pre-check, structured data, analysis, and quality results
@@ -292,7 +292,7 @@ Persian-resume-analyzer/
 - **OpenRouter**
 - **Requests**
 
-The repository also includes a pinned Python dependency environment in `requirements.txt`.
+The repository also includes the project dependencies in `requirements.txt`.
 
 ---
 
@@ -351,19 +351,18 @@ Review cleaned text
    ↓
 Run initial rule-based evaluation
    ↓
-Repair extracted text with AI
+Repair extracted text with LLM
    ↓
 Extract structured resume information
    ↓
-Run AI resume analysis
+Run resume analysis
    ↓
 Run quality assessment
    ↓
-Review strengths, weaknesses,
-quality findings, and recommendations
+Review findings and recommendations
 ```
 
-The application keeps the intermediate results in Streamlit session state so that the different stages can be displayed without losing previously generated results during the current session.
+The application keeps intermediate results in Streamlit session state so that the different stages can be displayed without losing previously generated results during the current session.
 
 ---
 
@@ -371,21 +370,21 @@ The application keeps the intermediate results in Streamlit session state so tha
 
 ### Preserve information
 
-The extraction and repair prompts explicitly instruct the LLM not to invent missing resume information.
+The extraction and repair prompts instruct the LLM not to invent missing resume information.
 
 ### Separate extraction from evaluation
 
-The system first extracts structured information and only then evaluates it. This reduces the risk of mixing factual extraction with subjective analysis.
+The system first extracts structured information and then evaluates it. This reduces the risk of mixing factual extraction with subjective analysis.
 
 ### Use deterministic checks where possible
 
-Information that can be checked explicitly—such as the presence of contact information, professional links, or recognizable resume sections—is handled by the rule-based layer rather than relying entirely on an LLM.
+Information that can be checked explicitly, such as the presence of contact information, professional links, or recognizable resume sections, is handled by the rule-based layer rather than relying entirely on an LLM.
 
-### Make feedback actionable
+### Make feedback specific
 
 The analysis prompts require explanations of why an issue matters and what practical improvement can be made.
 
-### Keep AI providers replaceable
+### Keep providers replaceable
 
 LLM access is centralized behind a service layer so that the rest of the application does not need to know how a specific provider is called.
 
@@ -395,7 +394,7 @@ LLM access is centralized behind a service layer so that the rest of the applica
 
 This project is designed primarily for **Persian-language resumes provided as PDF documents**.
 
-Because PDF extraction quality depends on the source document, the extracted text may sometimes contain artifacts that require reconstruction. The project addresses common cases through deterministic normalization and an optional LLM-based repair stage, but no PDF extraction pipeline can guarantee perfect reconstruction for every document layout.
+Because PDF extraction quality depends on the source document, the extracted text may sometimes contain artifacts that require reconstruction. The project addresses common cases through deterministic normalization and an LLM-based repair stage, but no PDF extraction pipeline can guarantee perfect reconstruction for every document layout.
 
 LLM-generated analysis is also dependent on the information successfully extracted from the resume and on the availability and behavior of the selected model provider.
 
@@ -457,7 +456,7 @@ The project follows a staged architecture rather than a single end-to-end prompt
               └──────────┬────────────┘
                          ↓
                 ┌────────────────────┐
-                │ Actionable Results │
+                │ Analysis Results    │
                 └────────────────────┘
 ```
 
@@ -465,34 +464,34 @@ The project follows a staged architecture rather than a single end-to-end prompt
 
 ## فارسی
 
-# تحلیل‌گر هوشمند رزومه فارسی
+# تحلیل‌گر رزومه فارسی
 
-یک سیستم هوشمند برای **تحلیل، ارزیابی و بهبود رزومه‌های فارسی** که ترکیبی از استخراج متن PDF، پاک‌سازی و نرمال‌سازی متن، تحلیل مبتنی بر Rule، پردازش با مدل‌های زبانی بزرگ، استخراج اطلاعات ساختاریافته و ارزیابی کیفیت رزومه را در قالب یک برنامه Streamlit ارائه می‌دهد.
+یک سیستم ماژولار برای **تحلیل، ارزیابی و بهبود رزومه‌های فارسی** که استخراج متن PDF، پاک‌سازی و نرمال‌سازی، تحلیل مبتنی بر Rule، اصلاح متن با LLM، استخراج اطلاعات ساختاریافته و ارزیابی کیفیت رزومه را در قالب یک برنامه Streamlit ترکیب می‌کند.
 
-هدف پروژه فقط تولید یک امتیاز نیست؛ بلکه یک pipeline چندمرحله‌ای ساخته شده است که رزومه PDF و متن نامنظم آن را به اطلاعات ساختاریافته و در نهایت به تحلیل و پیشنهادهای قابل‌استفاده تبدیل می‌کند.
+هدف پروژه فقط تولید یک امتیاز نیست؛ بلکه یک فرایند چندمرحله‌ای طراحی شده است که متن نامنظم یک رزومه PDF را به اطلاعات ساختاریافته و سپس به نتایج تحلیلی و پیشنهادهای قابل‌استفاده تبدیل می‌کند.
 
 ---
 
 ## قابلیت‌های اصلی
 
-- 📄 استخراج متن رزومه فارسی از PDF
-- 🧹 پاک‌سازی و نرمال‌سازی متن
-- 🔎 ارزیابی اولیه مبتنی بر Rule
-- 📊 استخراج اطلاعات ساختاریافته رزومه
-- ✨ اصلاح خطاهای ناشی از استخراج PDF با کمک AI
-- 🧠 تحلیل حرفه‌ای رزومه با LLM
-- 🔍 ارزیابی اختصاصی کیفیت رزومه
-- 🤖 بررسی جنبه‌های مرتبط با ATS
-- 💼 تحلیل با تمرکز بر مسیرهای شغلی فنی و دیدگاه Recruiter
-- 🔗 شناسایی اطلاعات تماس و لینک‌های حرفه‌ای مانند LinkedIn و GitHub
-- 📈 امتیازدهی و breakdown مبتنی بر قواعد برای چند بخش رزومه
-- 🔄 معماری ماژولار برای سرویس‌های LLM
-- 🛟 استفاده از OpenRouter به‌عنوان fallback در برخی خطاهای موقت Gemini
-- 🌐 رابط کاربری تعاملی با Streamlit
+- استخراج متن رزومه فارسی از PDF
+- پاک‌سازی و نرمال‌سازی متن
+- ارزیابی اولیه مبتنی بر Rule
+- استخراج اطلاعات ساختاریافته رزومه
+- اصلاح خطاهای ناشی از استخراج PDF با LLM
+- تحلیل رزومه با LLM
+- ارزیابی جداگانه کیفیت رزومه
+- بررسی جنبه‌های مرتبط با ATS
+- تحلیل از دیدگاه فنی و Recruiter
+- شناسایی اطلاعات تماس و لینک‌های حرفه‌ای مانند LinkedIn و GitHub
+- امتیازدهی و breakdown مبتنی بر قواعد
+- معماری ماژولار برای providerهای LLM
+- استفاده از OpenRouter به‌عنوان fallback در برخی خطاهای موقت Gemini
+- رابط کاربری تعاملی با Streamlit
 
 ---
 
-## روند کامل پردازش
+## روند پردازش
 
 ```text
 رزومه PDF
@@ -503,16 +502,16 @@ The project follows a staged architecture rather than a single end-to-end prompt
    ↓
 ارزیابی اولیه مبتنی بر Rule
    ↓
-اصلاح متن با AI
+اصلاح متن با LLM
    ↓
 استخراج اطلاعات ساختاریافته
    ↓
 ┌───────────────────────────────┐
-│ تحلیل رزومه با AI             │
+│ تحلیل رزومه                   │
 │ ارزیابی کیفیت رزومه           │
 └───────────────────────────────┘
    ↓
-تحلیل و پیشنهادهای قابل‌اقدام
+نتایج تحلیل
 ```
 
 ### ۱. استخراج متن از PDF
@@ -525,9 +524,9 @@ The project follows a staged architecture rather than a single end-to-end prompt
 
 ### ۳. ارزیابی اولیه مبتنی بر Rule
 
-قبل از تحلیل عمیق‌تر، یک تحلیل‌گر deterministic رزومه را بررسی می‌کند. این بخش مواردی مانند اطلاعات تماس، لینک‌های حرفه‌ای، ساختار رزومه، دستاوردها، کیفیت نگارش و محتوا را بررسی کرده و امتیاز و فهرست مشکلات را تولید می‌کند.
+قبل از مراحل تحلیل عمیق‌تر، یک تحلیل‌گر deterministic رزومه را بررسی می‌کند. این بخش اطلاعات تماس، لینک‌های حرفه‌ای، ساختار رزومه، دستاوردها، کیفیت نگارش و محتوا را بررسی کرده و امتیاز، breakdown و فهرست مشکلات را تولید می‌کند.
 
-### ۴. اصلاح متن با AI
+### ۴. اصلاح متن با LLM
 
 هدف این مرحله **بازسازی متن استخراج‌شده** است، نه بازنویسی حرفه‌ای رزومه.
 
@@ -537,9 +536,9 @@ The project follows a staged architecture rather than a single end-to-end prompt
 
 متن اصلاح‌شده به یک ساختار JSON تبدیل می‌شود که شامل اطلاعات شخصی، تحصیلات، سوابق کاری، مهارت‌ها، زبان‌ها، گواهینامه‌ها و پروژه‌هاست.
 
-### ۶. تحلیل هوشمند رزومه
+### ۶. تحلیل رزومه
 
-رزومه ساختاریافته از جنبه‌هایی مانند کیفیت پروفایل حرفه‌ای، ارتباط تحصیلات، تأثیر سوابق کاری، نحوه ارائه مهارت‌های فنی، کیفیت ارائه پروژه‌ها، دستاوردهای قابل‌اندازه‌گیری، ATS و آمادگی برای موقعیت‌های فنی بررسی می‌شود.
+رزومه ساختاریافته از جنبه‌هایی مانند کیفیت پروفایل حرفه‌ای، ارتباط تحصیلات، سوابق کاری، مهارت‌های فنی، ارائه پروژه‌ها، دستاوردهای قابل‌اندازه‌گیری، ATS و آمادگی برای موقعیت‌های فنی بررسی می‌شود.
 
 ### ۷. ارزیابی کیفیت رزومه
 
@@ -549,29 +548,39 @@ The project follows a staged architecture rather than a single end-to-end prompt
 2. ساختار حرفه‌ای رزومه
 3. برداشت اولیه Recruiter
 
-همچنین برای مشکلات، دلیل اهمیت و پیشنهاد بهبود ارائه می‌شود و اولویت‌بندی بهبودها نیز در خروجی وجود دارد.
+همچنین ارزیابی جداگانه‌ای برای کیفیت کلی، ATS، ساختار، تجربه کاری، پروفایل فنی، دیدگاه Recruiter و بهبودهای اولویت‌دار ارائه می‌شود.
 
 ---
 
-## تفاوت تحلیل Rule-Based و LLM
+## تحلیل Rule-Based در برابر LLM
 
-یکی از تصمیم‌های معماری مهم پروژه، جدا نگه‌داشتن بررسی‌های deterministic از تحلیل معنایی است.
+یکی از تصمیم‌های معماری پروژه، جدا نگه‌داشتن بررسی‌های deterministic از تحلیل معنایی است.
 
 | لایه | وظیفه |
 |---|---|
-| Rule-Based | بررسی‌های قطعی، ساختار، اطلاعات تماس، لینک‌ها، امتیازدهی و مشکلات مشخص |
-| LLM Text Repair | بازسازی متن آسیب‌دیده ناشی از استخراج PDF |
-| Structured Extraction | تبدیل متن به ساختار JSON مشخص |
-| Resume Analysis | تحلیل حرفه‌ای و شغلی رزومه |
-| Quality Analysis | بررسی ATS، ساختار، دیدگاه Recruiter و بهبودهای اولویت‌دار |
+| Rule-Based Analysis | بررسی‌های قطعی، ساختار، اطلاعات تماس، لینک‌ها، امتیازدهی و مشکلات مشخص |
+| Text Repair LLM | بازسازی متن آسیب‌دیده ناشی از استخراج PDF |
+| Structured Extraction LLM | تبدیل متن به ساختار JSON مشخص |
+| Resume Analysis LLM | تحلیل حرفه‌ای و شغلی رزومه |
+| Quality Analysis LLM | بررسی ATS، ساختار، دیدگاه Recruiter و بهبودهای اولویت‌دار |
+
+این معماری باعث می‌شود هر مرحله مسئولیت مشخصی داشته باشد و تمام فرایند به یک prompt واحد وابسته نباشد.
 
 ---
 
-## معماری سرویس‌های LLM
+## معماری Providerهای LLM
 
-Gemini سرویس اصلی پروژه است و OpenRouter در صورت بروز برخی خطاهای موقت مانند quota، rate limit یا unavailable بودن موقت سرویس به‌عنوان fallback استفاده می‌شود.
+پروژه از یک abstraction برای providerهای LLM در `services/llm_service.py` استفاده می‌کند.
 
-این منطق در یک لایه سرویس مرکزی قرار گرفته تا بخش‌های مختلف برنامه مستقیماً به پیاده‌سازی یک provider وابسته نباشند.
+### Provider اصلی: Gemini
+
+Gemini provider اصلی پروژه است.
+
+### Provider جایگزین: OpenRouter
+
+در صورت بروز برخی خطاهای موقت مانند quota، rate limit یا unavailable بودن موقت Gemini، برنامه تلاش می‌کند از OpenRouter به‌عنوان fallback استفاده کند.
+
+سایر خطاها به‌صورت خودکار به provider دیگری منتقل نمی‌شوند تا خطاهای مربوط به configuration یا برنامه پنهان نشوند.
 
 ---
 
@@ -615,60 +624,136 @@ Persian-resume-analyzer/
 └── README.md
 ```
 
----
+### مسئولیت بخش‌ها
 
-## اصول طراحی
-
-### حفظ اطلاعات اصلی
-
-Promptهای استخراج و اصلاح متن صراحتاً مدل را از ساختن اطلاعاتی که در رزومه وجود ندارند منع می‌کنند.
-
-### جداسازی Extraction و Evaluation
-
-ابتدا اطلاعات استخراج و ساختاریافته می‌شوند و سپس تحلیل انجام می‌شود. این جداسازی کمک می‌کند استخراج اطلاعات با قضاوت درباره کیفیت رزومه مخلوط نشود.
-
-### استفاده از Rule در موارد قابل‌بررسی
-
-مواردی که می‌توانند به‌صورت deterministic بررسی شوند، مانند وجود ایمیل، شماره تلفن، لینک LinkedIn یا GitHub و برخی بخش‌های رزومه، در لایه Rule-Based بررسی می‌شوند.
-
-### خروجی قابل‌اقدام
-
-تحلیل LLM فقط به بیان یک مشکل اکتفا نمی‌کند و promptها مدل را ملزم می‌کنند توضیح دهد مشکل چرا اهمیت دارد و چه اقدامی برای بهبود آن می‌توان انجام داد.
-
-### معماری قابل توسعه
-
-دسترسی به مدل‌های زبانی در لایه service قرار گرفته تا تغییر یا اضافه کردن providerهای دیگر، وابستگی بخش‌های اصلی برنامه به یک سرویس خاص را کاهش دهد.
+- **`app.py`** — مدیریت جریان اصلی برنامه Streamlit و session state
+- **`services/`** — providerهای LLM و منطق تحلیل رزومه
+- **`prompts/`** — promptهای اختصاصی برای وظایف مختلف LLM
+- **`utils/`** — ابزارهای استخراج PDF و پردازش متن
+- **`views/`** — نمایش نتایج pre-check، اطلاعات ساختاریافته، تحلیل و ارزیابی کیفیت
+- **`assets/`** — فایل‌های جانبی مانند فونت‌ها
 
 ---
 
-## اجرا
+## فناوری‌های استفاده‌شده
+
+- **Python**
+- **Streamlit**
+- **PyMuPDF**
+- **Regular Expressions (Regex)**
+- **JSON**
+- **Large Language Models (LLMs)**
+- **Google Gemini**
+- **OpenRouter**
+- **Requests**
+
+وابستگی‌های پروژه در فایل `requirements.txt` قرار دارند.
+
+---
+
+## اجرای پروژه
+
+### ۱. دریافت repository
 
 ```bash
 git clone https://github.com/sarahshakeri/Persian-resume-analyzer.git
 cd Persian-resume-analyzer
-python -m venv .venv
-pip install -r requirements.txt
-streamlit run app.py
 ```
 
-کلیدهای API موردنیاز از متغیرهای محیطی خوانده می‌شوند:
+### ۲. ساخت virtual environment
+
+```bash
+python -m venv .venv
+```
+
+سپس محیط مجازی را متناسب با سیستم‌عامل فعال کنید.
+
+### ۳. نصب وابستگی‌ها
+
+```bash
+pip install -r requirements.txt
+```
+
+### ۴. تنظیم API Keyها
+
+سرویس‌های LLM کلیدهای API را از environment variableها دریافت می‌کنند.
 
 ```text
 GEMINI_API_KEY=your_gemini_api_key
 OPENROUTER_API_KEY=your_openrouter_api_key
 ```
 
-کلیدهای API نباید در repository قرار بگیرند.
+کلیدهای API و اطلاعات محرمانه نباید در repository قرار بگیرند.
+
+### ۵. اجرای برنامه
+
+```bash
+streamlit run app.py
+```
+
+سپس می‌توان یک رزومه فارسی با فرمت PDF را وارد کرد و مراحل مختلف تحلیل را در رابط برنامه دنبال کرد.
 
 ---
 
-## محدودیت‌های فعلی
+## روند معمول استفاده
+
+```text
+آپلود PDF
+   ↓
+بررسی متن استخراج‌شده
+   ↓
+بررسی متن پاک‌سازی‌شده
+   ↓
+اجرای ارزیابی اولیه مبتنی بر Rule
+   ↓
+اصلاح متن استخراج‌شده با LLM
+   ↓
+استخراج اطلاعات ساختاریافته
+   ↓
+تحلیل رزومه
+   ↓
+ارزیابی کیفیت
+   ↓
+بررسی یافته‌ها و پیشنهادها
+```
+
+نتایج میانی مراحل مختلف در Streamlit session state نگهداری می‌شوند تا در طول همان session از بین نروند.
+
+---
+
+## اصول طراحی
+
+### حفظ اطلاعات اصلی
+
+Promptهای استخراج و اصلاح متن، مدل را از ساختن اطلاعاتی که در رزومه وجود ندارند منع می‌کنند.
+
+### جداسازی Extraction و Evaluation
+
+ابتدا اطلاعات استخراج و ساختاریافته می‌شوند و سپس ارزیابی انجام می‌شود. این جداسازی کمک می‌کند استخراج اطلاعات با قضاوت درباره کیفیت رزومه مخلوط نشود.
+
+### استفاده از Rule در موارد قابل‌بررسی
+
+مواردی مانند وجود اطلاعات تماس، لینک‌های حرفه‌ای و بخش‌های قابل‌شناسایی رزومه تا حد امکان در لایه Rule-Based بررسی می‌شوند.
+
+### ارائه بازخورد مشخص
+
+Promptهای تحلیل مدل را به ارائه توضیح درباره اهمیت مشکل و پیشنهاد عملی برای بهبود هدایت می‌کنند.
+
+### قابل‌تعویض بودن Providerها
+
+دسترسی به LLM در لایه service متمرکز شده است تا بخش‌های اصلی برنامه مستقیماً به یک provider خاص وابسته نباشند.
+
+---
+
+## محدوده و محدودیت‌های فعلی
 
 تمرکز اصلی پروژه روی **رزومه‌های فارسی در قالب PDF** است.
 
-کیفیت استخراج متن به ساختار فایل PDF وابسته است و ممکن است در بعضی فایل‌ها خطاهای مربوط به layout، ترتیب خواندن یا ساختار متن ایجاد شود. پروژه برای برخی از این موارد از نرمال‌سازی و اصلاح متن با AI استفاده می‌کند، اما نمی‌توان بازسازی کامل همه انواع PDF را تضمین کرد.
+کیفیت استخراج متن به ساختار فایل PDF وابسته است و ممکن است در بعضی فایل‌ها خطاهای مربوط به layout، ترتیب خواندن یا ساختار متن ایجاد شود. پروژه برای برخی از این موارد از نرمال‌سازی و اصلاح متن با LLM استفاده می‌کند، اما بازسازی کامل همه انواع PDF قابل تضمین نیست.
 
-همچنین تحلیل و امتیازدهی LLM به اطلاعات استخراج‌شده و رفتار و در دسترس بودن سرویس مدل وابسته است. امتیاز تولیدشده نباید به‌عنوان معیار عینی توانایی حرفه‌ای فرد در نظر گرفته شود و بهتر است به‌عنوان یک ابزار کمکی در کنار بررسی انسانی استفاده شود.
+همچنین تحلیل تولیدشده توسط LLM به اطلاعات استخراج‌شده از رزومه و وضعیت provider انتخاب‌شده وابسته است.
+
+امتیاز تولیدشده توسط سیستم نباید به‌عنوان معیار عینی توانایی حرفه‌ای فرد در نظر گرفته شود و بهتر است به‌عنوان یک ابزار کمکی در کنار بررسی انسانی استفاده شود.
 
 ---
 
@@ -685,8 +770,45 @@ OPENROUTER_API_KEY=your_openrouter_api_key
 
 ---
 
-## Author
+## معماری کلی
 
-**Sarah Shakeri**
+پروژه از یک معماری چندمرحله‌ای استفاده می‌کند و تحلیل را به یک prompt واحد محدود نمی‌کند:
 
-GitHub: [@sarahshakeri](https://github.com/sarahshakeri)
+```text
+                ┌────────────────────┐
+                │   Streamlit UI     │
+                └─────────┬──────────┘
+                          │
+                          ↓
+                ┌────────────────────┐
+                │   PDF Extraction   │
+                └─────────┬──────────┘
+                          ↓
+                ┌────────────────────┐
+                │ Text Normalization │
+                └─────────┬──────────┘
+                          ↓
+                ┌────────────────────┐
+                │ Rule-Based Checks  │
+                └─────────┬──────────┘
+                          ↓
+                ┌────────────────────┐
+                │    LLM Repair      │
+                └─────────┬──────────┘
+                          ↓
+                ┌────────────────────┐
+                │ Structured JSON    │
+                └──────┬───────┬─────┘
+                       │       │
+              ┌────────┘       └────────┐
+              ↓                         ↓
+      ┌───────────────┐       ┌────────────────┐
+      │ Resume        │       │ Quality        │
+      │ Analysis      │       │ Assessment     │
+      └───────┬───────┘       └───────┬────────┘
+              └──────────┬────────────┘
+                         ↓
+                ┌────────────────────┐
+                │ Analysis Results    │
+                └────────────────────┘
+```
